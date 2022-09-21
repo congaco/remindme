@@ -12,6 +12,6 @@ class AppModel:
         self.__message = content
 
     def save_message(self):
-        with open("messages", "a") as f:
+        with open("messages", "w") as f:
             f.write(self.message)
             f.write("\n")
