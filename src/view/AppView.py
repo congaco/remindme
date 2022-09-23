@@ -7,7 +7,7 @@ class AppView(tkinter.Frame):
         super().__init__(parent)
 
         self.message_verify = None
-        self.labelMessage = tkinter.Label(self, text="Message: ")
+        self.labelMessage = tkinter.Label(self, text="Message: ") # save messages in combox for more messages
         self.labelMessage.grid(row=0, column=0)
 
         self.message_var = tkinter.StringVar()
@@ -39,25 +39,18 @@ class AppView(tkinter.Frame):
         notificationGUI.pack()
         return notificationGUI
 
-    def read_content(self, file):
-        with open(file, "r", encoding="utf-8") as f:
-            content = f.read()
-            return content
-
     def is_activate_button_clicked(self):
         if self.controller:
             self.controller.save_message(self.message_var.get())
             if not self.time_var.get().isdigit():
-                self.set_text_color("red")
-
+                self.set_verified_message("red")
                 self.verify_var.set("Time must be integer. Please try again.")
             else:
-                self.set_text_color("green")
+                self.set_verified_message("green")
                 self.message_verify.grid(row=2, column=1, sticky=tkinter.EW)
                 self.verify_var.set("Verified!")
-                self.display_notification(self.read_content("messages"), self.time_var.get()).mainloop()
+                self.display_notification(self.controller.read_content("messages"), self.time_var.get()).mainloop()
 
-    def set_text_color(self,color):
-        self.message_verify = tkinter.Label(self, textvariable=self.verify_var, width=100
-                                            , foreground=color)
+    def set_verified_message(self, color):
+        self.message_verify = tkinter.Label(self, textvariable=self.verify_var, width=100, foreground=color)
         self.message_verify.grid(row=2, column=1, sticky=tkinter.EW)
